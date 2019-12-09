@@ -1,0 +1,25 @@
+extends layout
+
+block content
+    .container-fluid
+        .row
+            .col-lg-4
+            .col-lg-4
+                div(style="text-align: center;")
+                    h2 Welcom to jogajogbd
+                div
+                    input.form-control(placeholder="From", aria-describedby="basic-addon1")
+                    br
+                    input.form-control(placeholder="To", aria-describedby="basic-addon1")
+                    br
+                div(style="text-align: center;")
+                    button.btn.btn-primary.search_transport Search
+                br
+            .col-lg-4
+                button.btn.btn-primary.mybtn(type="button", data-val="abc") Submit
+        .row
+            .col-lg-4
+            .col-lg-4
+                .result sample
+            .col-lg-4
+

@@ -1,0 +1,45 @@
+for item in data
+    .card
+        .panel.panel-primary
+            .panel-body
+                table
+                    tr
+                        td(width="70px")
+                            b Bus
+                        td #{item.bus_name}
+                    tr
+                        td
+                            b Counter
+                        td #{item.counter}
+                    tr
+                        td
+                            b Route
+                        td #{item.route}
+                    tr
+                        td
+                            b Contact
+                        td #{item.contact}
+                    tr
+                        td
+                            b Booking
+                        td #{item.booking}
+                for bus_type in item.bus_types
+                    if bus_type.type_name == "economy"
+                        span(class="label label-default m1")  #{bus_type.type_name} : #{bus_type.ticket_cost}tk
+                    else if bus_type.type_name == "ac"
+                        span(class="label label-success m1")  #{bus_type.type_name} : #{bus_type.ticket_cost}tk
+                    else
+                        span(class="label label-primary m1")  #{bus_type.type_name} : #{bus_type.ticket_cost}tk
+            .panel-footer
+                table(class="table", style="display: inline-block")
+                    for schedule in item.bus_schedules
+                        tr
+                            td(width="60px") #{schedule.days}
+                            td
+                                for time in schedule.times
+                                    if time.bus_type == "economy"
+                                        span(class="label label-default m1") #{time.schedule_time}
+                                    else if time.bus_type == "ac"
+                                        span(class="label label-success m1") #{time.schedule_time}
+                                    else
+                                        span(class="label label-primary m1") #{time.schedule_time}

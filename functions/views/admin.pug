@@ -1,0 +1,94 @@
+extends layout
+
+block content
+    .container-fluid
+        .row
+            .col-lg-3
+            .col-lg-5
+                h2 Create new Route
+                form(class="add_new_route_form" name="add_new_route_form")
+                    table(class="table")
+                        tr
+                            td Bus Name
+                            td
+                                input(name="bus_name" required="true" class="form-control" value="Ajmiri")
+                        tr
+                            td Counter
+                            td
+                                input(name="counter" required="true" class="form-control" value="Gabtoli")
+                        tr
+                            td From
+                            td
+                                input(name="from" required="true" class="form-control" value="Dhaka")
+                        tr
+                            td To
+                            td
+                                input(name="to" required="true" class="form-control" value="Faridpur")
+                        tr
+                            td Contact Number
+                            td
+                                input(name="contact_number" class="form-control")
+                        tr
+                            td Booking Number
+                            td
+                                input(name="booking_number" class="form-control")
+                        tr
+                            td Bus Fare
+                            td
+                                .bus_type
+                                    table
+                                        tr
+                                            td
+                                                span(style="margin-right: 10px") Economy :
+                                            td
+                                                input(name="economy_fare" type="number" required="true" class="form-control" value="100")
+                                            td
+                                                span(style="margin-left: 10px") Taka
+                                            tr
+                                                td
+                                                    span(style="margin-right: 10px") AC :
+                                                td
+                                                    input(name="ac_fare" type="number" class="form-control")
+                                                td
+                                                    span(style="margin-left: 10px") Taka
+                                            tr
+                                                td
+                                                    span(style="margin-right: 10px") Business :
+                                                td
+                                                    input(name="business_fare" type="number" class="form-control")
+                                                td
+                                                    span(style="margin-left: 10px") Taka
+                        tr
+                            td Bus Schedule
+                                button(class="add_bus_schedule") Add Time
+                            td
+                                .bus_schedule
+                                    select(name="option_schedule_day_1")
+                                        option everyday
+                                        option saturday
+                                        option sunday
+                                        option monday
+                                        option tuesday
+                                        option wednesday
+                                        option thursday
+                                        option friday
+                                    select(name="option_bus_type_1")
+                                        option economy
+                                        option ac
+                                        option business
+                                    span(style="margin-left:10px; margin-right:10px;")
+                                        input(name="bus_schedule_1" value="9")
+                                    select(name="option_meridiem_1")
+                                        option am
+                                        option pm
+                    button(type="submit" class="btn btn-default") Submit
+
+
+
+
+            .col-lg-4
+        .row
+            .col-lg-4
+            .col-lg-4
+            .col-lg-4
+
