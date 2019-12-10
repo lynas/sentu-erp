@@ -59,7 +59,14 @@ app.get('/stocks/:productId', function (request, response) {
 
 app.post('/stocks-update/:productId', function (request, response) {
     const productId = request.params.productId;
-    return response.json(request.body);
+    const updatedProduct = request.body;
+    let setDoc = db.collection('products').doc(productId).set(updatedProduct);
+    setDoc.then(res => {
+        console.log(res);
+        // return response.json(updatedProduct);
+        return response.redirect('/');
+    });
+
 });
 
 

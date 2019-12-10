@@ -32,9 +32,12 @@ block content
                         th Item Name
                         th Unit Price
                         th Quantity
+                        th Option
                     each val in productList
                         tr
                             td=val.name
                             td=val.unitPrice
                             td=val.quantity
+                            td
+                                a(href='/stocks/'+val.id) Update
             .col-lg-3
