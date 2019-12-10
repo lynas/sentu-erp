@@ -5,12 +5,11 @@ block content
         .row
             .col-lg-4
             .col-lg-4
-                form(action="/stocks" method="POST")
+                form(action="/stocks-update/"+productId method="POST")
                     table(class="table")
                         tr
                             td Item Name
-                            td
-                                input(name="name" required="true" value="" placeholder="Twinkel baby diaper [s5]")
+                            td=product.name
                         tr
                             td Unit price
                             td
@@ -22,19 +21,9 @@ block content
                         tr
                             td
                             td
-                                input(value="Add to stock" type="submit")
+                                input(value="Update stock" type="submit")
             .col-lg-4
         .row
             .col-lg-3
             .col-lg-6
-                table(class="table")
-                    tr
-                        th Item Name
-                        th Unit Price
-                        th Quantity
-                    each val in productList
-                        tr
-                            td=val.name
-                            td=val.unitPrice
-                            td=val.quantity
             .col-lg-3

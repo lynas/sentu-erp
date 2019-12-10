@@ -10,26 +10,57 @@ app.set('view engine', 'pug');
 app.use('/asset', express.static(__dirname + '/asset'));
 
 app.get('/', function (req, res) {
-    return res.render('index', {title: "jogajog"});
-});
-
-app.post('/items', function (req, response) {
-    const id = '' + uuid.v1() + '';
-    let data = {
-        name: 'Los Angeles',
-        state: 'CA',
-        country: 'USA22'
-    };
-    /*    let setDoc = db.collection('shop-erp').doc(id).set(data);
-        setDoc.then(res => {
-            console.log(res);
-
-        });*/
-    db.collection('shop-erp').doc('d97d98f0-1b1d-11ea-9cc2-d765b666ba7c')
-        .get()
-        .then(result => {
-            return response.json(result.data());
+    const productList = [];
+    let productRef = db.collection('products');
+    productRef.get()
+        .then(snapshot => {
+            snapshot.forEach(doc => {
+                console.log(doc.id, '=>', doc.data());
+                productList.push(doc.data());
+            });
+            // return res.json({title: "jogajog", productList: productList});
+            return res.render('index', {title: "jogajog", productList: productList});
+        })
+        .catch(err => {
+            console.log('Error getting documents', err);
+            return res.render('index', {title: "jogajog"});
         });
 });
+
+app.post('/stocks', function (req, response) {
+    const input = req.body;
+    let setDoc = db.collection('products').doc(uuid.v1()).set(input);
+    setDoc.then(res => {
+        console.log(res);
+        return response.json(input);
+    });
+
+});
+
+app.get('/stocks/:productId', function (request, response) {
+    const productId = request.params.productId;
+    let productRef = db.collection('products').doc(productId);
+    productRef.get()
+        .then(snapshot => {
+            // return response.json(snapshot.data());
+
+            return response.render('stock-update', {
+                title: "Stock Update",
+                product: snapshot.data(),
+                productId: productId
+            });
+        })
+        .catch(err => {
+            console.log('Error getting documents', err);
+            return response.json({err: err});
+        });
+});
+
+
+app.post('/stocks-update/:productId', function (request, response) {
+    const productId = request.params.productId;
+    return response.json(request.body);
+});
+
 
 exports.app = functions.https.onRequest(app);
