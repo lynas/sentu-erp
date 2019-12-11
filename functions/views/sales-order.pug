@@ -8,9 +8,6 @@ block content
             .col-lg-6
         .row
             .col-lg-2
-                button(class='add-row' style='width:40px') +
-                br
-                button(class='remove-row' style='width:40px') -
             .col-lg-8
                 form(class='sales-order-form')
                     table(class="table" id="sales-order-table")
@@ -22,25 +19,22 @@ block content
                                 th Free Quantity
                                 th Sub Total
                         tbody
-                            tr
-                                td
-                                    select(name='itemName' class='form-control' style='width: 250px;')
-                                        option
-                                        option Option1
-                                        option Option2
-                                        option Option3
-                                td
-                                    input(name='unitPrice' type='text' readonly='readonly' value='50' class='form-control')
-                                td
-                                    input(name='quantity' type='number' value='6' class='form-control')
-                                td
-                                    input(name='freeQuantity' type='number' value='1' class='form-control')
-                                td
-                                    input(name='subTotal' type='text' readonly='readonly' value='300' class='form-control')
+                            each product in productList
+                                tr
+                                    td
+                                        input(name='id' type='hidden' readonly='readonly' value=product.id class='form-control')
+                                        input(name='name' type='text' readonly='readonly' value=product.name class='form-control')
+                                    td
+                                        input(name='unitPrice' type='text' readonly='readonly' value=product.unitPrice class='form-control')
+                                    td
+                                        input(name='sellQuantity' type='number' required="true" value="0" class='form-control')
+                                    td
+                                        input(name='freeQuantity' type='number' required="true" value="0" class='form-control')
+                                    td
+                                        input(name='subTotal' type='text' readonly='readonly' value='0' class='form-control')
                     input(type='submit' value='Submit' class='form-control')
             .col-lg-2
         .row
             .col-lg-2
             .col-lg-8
             .col-lg-2
-                button(value='Submit' class='form-control btn primary sale-save')

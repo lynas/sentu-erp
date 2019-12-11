@@ -71,7 +71,12 @@ app.post('/stocks-update/:productId', function (request, response) {
 
 app.get('/sales-order',  (request, response) => {
     return response.render('sales-order', {
-        title: "Sales Order"
+        title: "Sales Order",
+        productList: [
+            {id:"item1",name:"item1",unitPrice:"34"},
+            {id:"item2",name:"item2",unitPrice:"45"},
+            {id:"item3",name:"item3",unitPrice:"76"}
+            ]
     });
 });
 
