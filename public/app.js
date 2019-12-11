@@ -35,6 +35,19 @@
     });
 
 
+
+    $(".add-row").on("click",function(){
+        const $tableBody = $('#sales-order-table').find("tbody"),
+            $trLast = $tableBody.find("tr:last"),
+            $trNew = $trLast.clone();
+        $trLast.after($trNew);
+    });
+
+    $('.remove-row').on("click", function(){
+        $('#sales-order-table tr:last').remove();
+    })
+
+
 })(jQuery);
 
 
