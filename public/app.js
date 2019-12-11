@@ -20,7 +20,21 @@
         });
     });
 
-
+    $('.sales-order-form').submit(function () {
+        const json = $('.table tr:gt(0)').map(function () {
+            return {
+                itemName: $(this).find('select option:selected').text(),
+                unitPrice: $(this).find('[name=unitPrice]').val(),
+                quantity: $(this).find('[name=quantity]').val(),
+                freeQuantity: $(this).find('[name=freeQuantity]').val(),
+                subTotal: $(this).find('[name=subTotal]').val()
+            }
+        }).get();
+        console.log(json);
+        return false; // added to stay on the page for testing purpose
+    });
 
 
 })(jQuery);
+
+

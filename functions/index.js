@@ -69,5 +69,11 @@ app.post('/stocks-update/:productId', function (request, response) {
 
 });
 
+app.get('/sales-order',  (request, response) => {
+    return response.render('sales-order', {
+        title: "Sales Order"
+    });
+});
+
 
 exports.app = functions.https.onRequest(app);
