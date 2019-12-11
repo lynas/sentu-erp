@@ -70,14 +70,36 @@ app.post('/stocks-update/:productId', function (request, response) {
 });
 
 app.get('/sales-order',  (request, response) => {
-    return response.render('sales-order', {
-        title: "Sales Order",
-        productList: [
-            {id:"item1",name:"item1",unitPrice:"34"},
-            {id:"item2",name:"item2",unitPrice:"45"},
-            {id:"item3",name:"item3",unitPrice:"76"}
-            ]
-    });
+    const productList = [];
+    let productRef = db.collection('products');
+    productRef.get()
+        .then(snapshot => {
+            snapshot.forEach(doc => {
+                console.log(doc.id, '=>', doc.data());
+                productList.push(doc.data());
+            });
+            return response.render('sales-order', {
+                title: "Sales Order",
+                productList: productList
+            });
+        })
+        .catch(err => {
+            console.log('Error getting documents', err);
+            return res.render('index', {title: "jogajog"});
+        });
+});
+
+app.post('/sales-order',  (request, response) => {
+    // TODO need fix
+    const input = request.body;
+    console.log("sales-order-input");
+    console.log(input);
+    /*let setDoc = db.collection('sales-order').doc(uuid.v1()).set(input);
+    setDoc.then(res => {
+        console.log(res);
+        return response.json(input);
+    });*/
+    return response.json(input);
 });
 
 

@@ -32,6 +32,21 @@
             }
         }).get();
         console.log(json);
+        // $.post("/sales-order", json);
+
+        $.ajax({
+            url: "/sales-order",
+            type: "POST",
+            contentType: "application/json",
+            data: {orderList: json},
+            success: function (result) {
+                console.log(result);
+                $(".result").html("result");
+            }, error: function (error) {
+                console.log(error);
+            }
+
+        });
         return false; // added to stay on the page for testing purpose
     });
 
@@ -41,7 +56,7 @@
 
     });
 
-    $('input[name=sellQuantity]').change(function() {
+    $('input[name=sellQuantity]').change(function () {
         console.log("onchange");
         console.log($(this).parent().parent().find('[name=unitPrice]').val());
         const unitPrice = $(this).parent().parent().find('[name=unitPrice]').val();
@@ -50,7 +65,6 @@
         const subTotal = parseFloat(unitPrice) * parseFloat(sellQuantity);
         $(this).parent().parent().find('[name=subTotal]').val(subTotal);
     });
-
 
 
 })(jQuery);
