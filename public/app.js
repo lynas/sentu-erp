@@ -23,22 +23,52 @@
     $('.sales-order-form').submit(function () {
         const json = $('.table tr:gt(0)').map(function () {
             return {
-                id: $(this).find('[name=id]').val(),
-                itemName: $(this).find('[name=name]').val(),
-                unitPrice: $(this).find('[name=unitPrice]').val(),
-                quantity: $(this).find('[name=sellQuantity]').val(),
-                freeQuantity: $(this).find('[name=freeQuantity]').val(),
-                subTotal: $(this).find('[name=subTotal]').val()
-            }
+                    id: $(this).find('[name=id]').val(),
+                    itemName: $(this).find('[name=name]').val(),
+                    unitPrice: $(this).find('[name=unitPrice]').val(),
+                    quantity: $(this).find('[name=sellQuantity]').val(),
+                    freeQuantity: $(this).find('[name=freeQuantity]').val(),
+                    subTotal: $(this).find('[name=subTotal]').val()
+                }
         }).get();
         console.log(json);
-        // $.post("/sales-order", json);
+        console.log(JSON.stringify(json));
 
+        const myObj1 = {};
+        json.map(it=> {
+            myObj1[it.id] = {
+                id: it.id,
+                itemName: it.itemName,
+                unitPrice: it.unitPrice,
+                quantity: it.quantity,
+                freeQuantity: it.freeQuantity,
+                subTotal: it.subTotal
+            }
+        });
+
+        console.log("new iob");
+        console.log(myObj1);
+
+
+
+        /*const newObj = json.filter(it=> parseInt(it.quantity) != 0);
+
+
+        const myObj1 = {};
+        console.log("newObj");
+        console.log(newObj);
+        newObj.forEach(each => {
+            "id" : ""
+        });*/
+        // $.post("/sales-order", json);
+        const requestBody = {
+            salesOrder: json
+        };
         $.ajax({
             url: "/sales-order",
             type: "POST",
             contentType: "application/json",
-            data: {orderList: json},
+            data: JSON.stringify(myObj1),
             success: function (result) {
                 console.log(result);
                 $(".result").html("result");

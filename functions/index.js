@@ -70,7 +70,12 @@ app.post('/stocks-update/:productId', function (request, response) {
 });
 
 app.get('/sales-order',  (request, response) => {
-    const productList = [];
+    const productList = [{
+        id: "1",
+        name: "name1",
+        quantity: "20",
+        unitPrice: "20"
+    }];
     let productRef = db.collection('products');
     productRef.get()
         .then(snapshot => {
@@ -85,21 +90,35 @@ app.get('/sales-order',  (request, response) => {
         })
         .catch(err => {
             console.log('Error getting documents', err);
-            return res.render('index', {title: "jogajog"});
+            return response.render('index', {title: "jogajog"});
         });
+/*    return response.render('sales-order', {
+        title: "Sales Order",
+        productList: productList
+    });*/
 });
 
-app.post('/sales-order',  (request, response) => {
+app.post('/sales-order', (request, response) => {
+    const demoData = {
+        "id": {
+            "sale": "1"
+        },
+        "id2": {
+            "sale": "1"
+        }
+    };
+
+
     // TODO need fix
     const input = request.body;
     console.log("sales-order-input");
     console.log(input);
-    /*let setDoc = db.collection('sales-order').doc(uuid.v1()).set(input);
+    let setDoc = db.collection('sales-order').doc(uuid.v1()).set(input);
     setDoc.then(res => {
         console.log(res);
         return response.json(input);
-    });*/
-    return response.json(input);
+    });
+    // return response.json(input);
 });
 
 
