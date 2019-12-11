@@ -35,7 +35,9 @@
         console.log(JSON.stringify(json));
 
         const myObj1 = {};
-        json.map(it=> {
+        json
+            .filter(it=> parseInt(it.quantity) != 0)
+            .forEach(it=> {
             myObj1[it.id] = {
                 id: it.id,
                 itemName: it.itemName,
