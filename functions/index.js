@@ -108,16 +108,18 @@ app.post('/sales-order', (request, response) => {
     input.productIdAndSoldQuantity.forEach(productLocal => {
         console.log("productLocal");
         console.log(productLocal);
+        db.collection('products').doc(productLocal.productId)
         db.collection('products')
             .doc(productLocal.productId)
             .get()
             .then(productDb => {
                 console.log("productDb");
-                console.log(productDb);
-                productDb.quantity = 99;
+                const productDbData = productDb.data();
+                console.log(productDbData);
+                productDbData.quantity = parseInt(productDbData.quantity) - parseInt(productLocal.soldQuantity);
                 db.collection('products')
-                    .doc(productDb.id)
-                    .update(productDb);
+                    .doc(productDbData.id)
+                    .update(productDbData);
             })
             .catch(err => {
                 console.log('Error getting documents', err);
