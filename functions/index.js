@@ -33,7 +33,7 @@ app.post('/stocks', function (req, response) {
     let setDoc = db.collection('products').doc(input.id).set(input);
     setDoc.then(res => {
         console.log(res);
-        return response.json(input);
+        response.redirect('/')
     });
 
 });

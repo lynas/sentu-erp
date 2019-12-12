@@ -82,9 +82,14 @@
             }),
             success: function (result) {
                 console.log(result);
-                $(".result").html("result");
+                $(".result").html("Data saved");
+                setTimeout(function(){
+                    console.log("delaying 5 second")
+                }, 5000);
+                top.location.href = '/';
             }, error: function (error) {
                 console.log(error);
+                $(".result").html("Data saved error see log");
             }
 
         });
