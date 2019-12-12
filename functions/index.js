@@ -3,12 +3,59 @@ const functions = require('firebase-functions');
 const uuid = require('uuid');
 admin.initializeApp(functions.config().firebase);
 let db = admin.firestore();
+let auth = admin.auth();
 
 const express = require('express');
 const app = express();
 app.set('view engine', 'pug');
 app.use('/asset', express.static(__dirname + '/asset'));
 
+app.get('/login', function (request, response) {
+/*    auth.createUser({
+        email: 'sazzad@gmail.com',
+        emailVerified: true,
+        phoneNumber: '+11234567890',
+        password: 'sazzad',
+        displayName: 'Sazzad',
+        photoURL: 'http://lynas.github.io/img/01.jpg',
+        disabled: false
+    }).catch(e=> console.log(e));*/
+//https://firebase.google.com/docs/reference/admin/node/admin.auth.Auth
+    const actionCodeSettings = {
+        "continue-uri" : "https://stock-erpz.web.app/",
+        "auth-continue-uri" : "https://stock-erpz.web.app/",
+        "auth-continue-url" : "https://stock-erpz.web.app/",
+        "url" : "https://stock-erpz.web.app/",
+        handleCodeInApp: true
+    };
+    auth.generateSignInWithEmailLink('sazzad@gmail.com', actionCodeSettings)
+        .then(function (link) {
+            console.log("link");
+            console.log(link);
+            return response.json({link: link});
+        })
+        .catch(function (error) {
+            console.log("error");
+            console.log(error);
+            return response.json({err: error});
+        });
+    // response.redirect('/')
+});
+app.get('/isLoggedIn', function (request, response) {
+    const sessionCookie = request.cookies.session || '';
+    // Verify the session cookie. In this case an additional check is added to detect
+    // if the user's Firebase session was revoked, user deleted/disabled, etc.
+    auth.verifySessionCookie(
+        sessionCookie, true /** checkRevoked */)
+        .then((decodedClaims) => {
+            console.log("decodedClaims");
+            console.log(decodedClaims);
+            return response.json({decodedClaims: decodedClaims});
+        })
+        .catch(error => {
+            return response.json({err: error});
+        });
+});
 app.get('/', function (req, res) {
     const productList = [];
     let productRef = db.collection('products');
