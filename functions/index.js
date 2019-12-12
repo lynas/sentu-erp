@@ -18,12 +18,12 @@ app.get('/', function (req, res) {
                 console.log(doc.id, '=>', doc.data());
                 productList.push(doc.data());
             });
-            // return res.json({title: "jogajog", productList: productList});
-            return res.render('index', {title: "jogajog", productList: productList});
+            // return res.json({title: "Stock", productList: productList});
+            return res.render('index', {title: "Stock-Home", productList: productList});
         })
         .catch(err => {
             console.log('Error getting documents', err);
-            return res.render('index', {title: "jogajog"});
+            return res.render('index', {title: "Stock"});
         });
 });
 
@@ -70,12 +70,13 @@ app.post('/stocks-update/:productId', function (request, response) {
 });
 
 app.get('/sales-order',  (request, response) => {
-    const productList = [{
+    const demoProduct = {
         id: "1",
         name: "name1",
         quantity: "20",
         unitPrice: "20"
-    }];
+    };
+    const productList = [];
     let productRef = db.collection('products');
     productRef.get()
         .then(snapshot => {
@@ -90,7 +91,7 @@ app.get('/sales-order',  (request, response) => {
         })
         .catch(err => {
             console.log('Error getting documents', err);
-            return response.render('index', {title: "jogajog"});
+            return response.render('index', {title: "Stock"});
         });
 /*    return response.render('sales-order', {
         title: "Sales Order",
@@ -99,21 +100,47 @@ app.get('/sales-order',  (request, response) => {
 });
 
 app.post('/sales-order', (request, response) => {
-    const demoData = {
-        "id": {
-            "sale": "1"
-        },
-        "id2": {
-            "sale": "1"
-        }
-    };
-
-
-    // TODO need fix
     const input = request.body;
     console.log("sales-order-input");
     console.log(input);
-    let setDoc = db.collection('sales-order').doc(uuid.v1()).set(input);
+    let setDoc = db.collection('sales-order').doc(uuid.v1()).set(input.salesOrderObj);
+
+    input.productIdAndSoldQuantity.forEach(productLocal => {
+        console.log("productLocal");
+        console.log(productLocal);
+        db.collection('products')
+            .doc(productLocal.productId)
+            .get()
+            .then(productDb => {
+                console.log("productDb");
+                console.log(productDb);
+                productDb.quantity = 99;
+                db.collection('products')
+                    .doc(productDb.id)
+                    .update(productDb);
+            })
+            .catch(err => {
+                console.log('Error getting documents', err);
+            });
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     setDoc.then(res => {
         console.log(res);
         return response.json(input);

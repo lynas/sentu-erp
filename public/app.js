@@ -23,40 +23,46 @@
     $('.sales-order-form').submit(function () {
         const json = $('.table tr:gt(0)').map(function () {
             return {
-                    id: $(this).find('[name=id]').val(),
-                    itemName: $(this).find('[name=name]').val(),
-                    unitPrice: $(this).find('[name=unitPrice]').val(),
-                    quantity: $(this).find('[name=sellQuantity]').val(),
-                    freeQuantity: $(this).find('[name=freeQuantity]').val(),
-                    subTotal: $(this).find('[name=subTotal]').val()
-                }
+                id: $(this).find('[name=id]').val(),
+                itemName: $(this).find('[name=name]').val(),
+                unitPrice: $(this).find('[name=unitPrice]').val(),
+                quantity: $(this).find('[name=sellQuantity]').val(),
+                freeQuantity: $(this).find('[name=freeQuantity]').val(),
+                subTotal: $(this).find('[name=subTotal]').val()
+            }
         }).get();
+
+
         console.log(json);
         console.log(JSON.stringify(json));
 
-        const myObj1 = {};
+        const salesOrderObj = {};
+        const productIdAndSoldQuantity = [];
         json
-            .filter(it=> parseInt(it.quantity) != 0)
-            .forEach(it=> {
-            myObj1[it.id] = {
-                id: it.id,
-                itemName: it.itemName,
-                unitPrice: it.unitPrice,
-                quantity: it.quantity,
-                freeQuantity: it.freeQuantity,
-                subTotal: it.subTotal
-            }
-        });
+            .filter(it => parseInt(it.quantity) != 0)
+            .forEach(it => {
+                salesOrderObj[it.id] = {
+                    id: it.id,
+                    itemName: it.itemName,
+                    unitPrice: it.unitPrice,
+                    quantity: it.quantity,
+                    freeQuantity: it.freeQuantity,
+                    subTotal: it.subTotal
+                };
+                productIdAndSoldQuantity.push({
+                    productId: it.id,
+                    soldQuantity: it.quantity
+                })
+            });
 
         console.log("new iob");
-        console.log(myObj1);
-
+        console.log(salesOrderObj);
 
 
         /*const newObj = json.filter(it=> parseInt(it.quantity) != 0);
 
 
-        const myObj1 = {};
+        const salesOrderObj = {};
         console.log("newObj");
         console.log(newObj);
         newObj.forEach(each => {
@@ -70,7 +76,10 @@
             url: "/sales-order",
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify(myObj1),
+            data: JSON.stringify({
+                salesOrderObj: salesOrderObj,
+                productIdAndSoldQuantity: productIdAndSoldQuantity
+            }),
             success: function (result) {
                 console.log(result);
                 $(".result").html("result");
