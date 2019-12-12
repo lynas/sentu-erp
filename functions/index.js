@@ -29,7 +29,8 @@ app.get('/', function (req, res) {
 
 app.post('/stocks', function (req, response) {
     const input = req.body;
-    let setDoc = db.collection('products').doc(uuid.v1()).set(input);
+    input.id = uuid.v1();
+    let setDoc = db.collection('products').doc(input.id).set(input);
     setDoc.then(res => {
         console.log(res);
         return response.json(input);
