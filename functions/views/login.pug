@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    .container-fluid
+        .row
+            .col-lg-4
+            .col-lg-4
+                form(action="/login" method="POST")
+                    table(class="table")
+                        tr
+                            td Username
+                            td
+                                input(name="username" required="true" value="" placeholder="user" type='text')
+                        tr
+                            td Password
+                            td
+                                input(name="password" required="true" placeholder="****" type="password")
+                        tr
+                            td
+                            td
+                                input(value="Login" type="submit")
+            .col-lg-4
