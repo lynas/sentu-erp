@@ -97,6 +97,7 @@ app.get('/sales-order', (request, response) => {
             });
             return response.render('sales-order', {
                 title: "Sales Order",
+                today: today(),
                 productList: productList
             });
         })
@@ -111,7 +112,14 @@ app.post('/sales-order', (request, response) => {
     const input = request.body;
     console.log("sales-order-input");
     console.log(input);
-    let setDoc = db.collection('sales-order').doc(uuid.v1()).set(input.salesOrderObj);
+    const salesOrderJson = {
+        date: request.body.date,
+        customerName: input.customerName,
+        voucherNumber: input.voucherNumber,
+        salesProductList: input.salesOrderObj,
+
+    };
+    let setDoc = db.collection('sales-order').doc(uuid.v1()).set(salesOrderJson);
 
     input.productIdAndSoldQuantity.forEach(productLocal => {
         console.log("productLocal");
@@ -178,6 +186,16 @@ function isUserLoggedIn(request, response) {
     if (!request.session.isLoggedIn) {
         response.redirect('/login');
     }
+}
+
+function today(){
+    let today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const year = today.getFullYear();
+
+    today = day + '/' + month + '/' + year;
+    return today
 }
 
 

@@ -21,7 +21,14 @@
     });
 
     $('.sales-order-form').submit(function () {
-        const json = $('.table tr:gt(0)').map(function () {
+        const date = $('.date').val();
+        const customerName = $('.customerName').val();
+        if (customerName.trim() === "") {
+            alert("Customer name must not be empty");
+            return false;
+        }
+        const voucherNumber = $('.voucherNumber').val();
+        const json = $('.sales-order-table tr:gt(0)').map(function () {
             return {
                 id: $(this).find('[name=id]').val(),
                 itemName: $(this).find('[name=name]').val(),
@@ -51,7 +58,7 @@
                 };
                 productIdAndSoldQuantity.push({
                     productId: it.id,
-                    soldQuantity: it.quantity
+                    soldQuantity: (parseInt(it.quantity) + parseInt(it.freeQuantity))
                 })
             });
 
@@ -59,27 +66,23 @@
         console.log(salesOrderObj);
 
 
-        /*const newObj = json.filter(it=> parseInt(it.quantity) != 0);
-
-
-        const salesOrderObj = {};
-        console.log("newObj");
-        console.log(newObj);
-        newObj.forEach(each => {
-            "id" : ""
-        });*/
-        // $.post("/sales-order", json);
-        const requestBody = {
-            salesOrder: json
+        const requestJson = {
+            salesOrderObj: salesOrderObj,
+            productIdAndSoldQuantity: productIdAndSoldQuantity,
+            date: date,
+            customerName: customerName,
+            voucherNumber: voucherNumber
         };
+
+        console.log("requestJson");
+        console.log(requestJson);
+
+
         $.ajax({
             url: "/sales-order",
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify({
-                salesOrderObj: salesOrderObj,
-                productIdAndSoldQuantity: productIdAndSoldQuantity
-            }),
+            data: JSON.stringify(requestJson),
             success: function (result) {
                 console.log(result);
                 $(".result").html("Data saved");

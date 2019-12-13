@@ -3,14 +3,28 @@ extends layout
 block content
     .container-fluid
         .row
-            .col-lg-3
-            .col-lg-3
-            .col-lg-6
+            .col-lg-4
+
+            .col-lg-4
+                table(class="table")
+                    tr
+                        td Date
+                        td
+                            input(class="date" required="true" value='' + today placeholder="Twinkel baby diaper [s5]")
+                    tr
+                        td Customer Name
+                        td
+                            input(class="customerName" required='true')
+                    tr
+                        td Voucher Number
+                        td
+                            input(class="voucherNumber")
+            .col-lg-4
         .row
             .col-lg-2
             .col-lg-8
                 form(class='sales-order-form')
-                    table(class="table" id="sales-order-table")
+                    table(class="table sales-order-table" id="sales-order-table")
                         thead
                             tr
                                 th Item Name
