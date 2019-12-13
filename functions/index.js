@@ -15,7 +15,7 @@ app.set('view engine', 'pug');
 app.use('/asset', express.static(__dirname + '/asset'));
 // TODO change in production
 app.use(session({
-    secret:'XASDASDA',
+    secret: 'XASDASDA',
     name: '__session'
 }));
 
@@ -107,6 +107,26 @@ app.get('/sales-order', (request, response) => {
         });
 });
 
+app.get('/sales-order/:day', (request, response) => {
+    isUserLoggedIn(request, response);
+    const salesOfDayList = [];
+    const day = request.params.day;
+    let salesOfDay = db.collection('sales-order').where('date', '==', day);
+    salesOfDay.get()
+        .then(snapshot => {
+            snapshot.forEach(doc => {
+                console.log(doc.id, '=>', doc.data());
+                salesOfDayList.push(doc.data());
+
+            });
+            return response.json(salesOfDayList);
+        })
+        .catch(err => {
+            console.log('Error getting documents', err);
+            return response.json({err: err});
+        });
+});
+
 app.post('/sales-order', (request, response) => {
     isUserLoggedIn(request, response);
     const input = request.body;
@@ -163,7 +183,7 @@ app.post('/login', (request, response) => {
     if (username === 'sazzad' && password === '1234') {
         request.session.isLoggedIn = true;
         return response.redirect('/');
-    }else{
+    } else {
         return response.render('error', {
             title: "User Login",
             message: "Username or password incorrect"
@@ -188,7 +208,7 @@ function isUserLoggedIn(request, response) {
     }
 }
 
-function today(){
+function today() {
     let today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
     const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
