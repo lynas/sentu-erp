@@ -119,3 +119,51 @@
 })(jQuery);
 
 
+function demo() {
+
+    const input = [
+        {
+            "customerName": "",
+            "salesProductList": {
+                "8a02ef80-1b60-11ea-9437-ff6cba26f08f": {
+                    "itemName": "TP-Link_D530",
+                    "id": "8a02ef80-1b60-11ea-9437-ff6cba26f08f"
+                },
+                "f74695b0-1b60-11ea-8168-7d4d29ce8e7e": {
+                    "id": "f74695b0-1b60-11ea-8168-7d4d29ce8e7e",
+                    "itemName": "Twinkel baby diaper [5S]"
+                }
+            },
+            "voucherNumber": "",
+            "date": "13-12-2019"
+        },
+        {
+            "customerName": "Sazzad",
+            "salesProductList": {
+                "8a02ef80-1b60-11ea-9437-ff6cba26f08f": {
+                    "itemName": "TP-Link_D530",
+                    "id": "8a02ef80-1b60-11ea-9437-ff6cba26f08f"
+                }
+            },
+            "voucherNumber": "111",
+            "date": "13-12-2019"
+        }
+    ];
+
+    input.forEach(so => {
+        console.log("outer");
+        const productList = [];
+        for (const prop in so.salesProductList) {
+            console.log("Inner");
+            console.log(prop);
+            console.log(so.salesProductList[prop].itemName);
+            productList.push({itemName:so.salesProductList[prop].itemName})
+        }
+        so.productArray = productList;
+    });
+
+    console.log("input");
+    console.log(input);
+    console.log(input[0].productArray[0]);
+}
+

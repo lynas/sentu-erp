@@ -119,7 +119,28 @@ app.get('/sales-order/:day', (request, response) => {
                 salesOfDayList.push(doc.data());
 
             });
-            return response.json(salesOfDayList);
+
+            salesOfDayList.forEach(so => {
+                const productList = [];
+                for (const prop in so.salesProductList) {
+                    productList.push({
+                        id:so.salesProductList[prop].id,
+                        quantity:so.salesProductList[prop].quantity,
+                        unitPrice:so.salesProductList[prop].unitPrice,
+                        subTotal:so.salesProductList[prop].subTotal,
+                        freeQuantity:so.salesProductList[prop].freeQuantity,
+                        itemName:so.salesProductList[prop].itemName
+                    })
+                }
+                so.productArray = productList;
+            });
+
+
+            // return response.json(salesOfDayList);
+            return response.render('sales-order-of-a-day', {
+                title: "Sales Order",
+                salesOrderList: salesOfDayList
+            });
         })
         .catch(err => {
             console.log('Error getting documents', err);

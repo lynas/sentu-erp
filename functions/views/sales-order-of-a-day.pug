@@ -1,0 +1,37 @@
+extends layout
+
+block content
+    .container-fluid
+        each salesOrder in salesOrderList
+            .row
+                .col-lg-2
+                .col-lg-8
+                    br
+                    br
+                    div(style='border: 1px dashed')
+                        table(class="table")
+                            tr
+                                td="Order Date"
+                                td=salesOrder.date
+                                td="Customer Name"
+                                td=salesOrder.customerName
+                                td="Voucher Number"
+                                td=salesOrder.voucherNumber
+                        br
+                        br
+                        table(class="table")
+                            tr
+                                th Item Name
+                                th Unit Price
+                                th Quantity
+                                th Free Quantity
+                                th Option
+                            each product in salesOrder.productArray
+                                tr
+                                    td=product.itemName
+                                    td=product.unitPrice
+                                    td=product.quantity
+                                    td=product.freeQuantity
+                                    td=product.subTotal
+                .col-lg-2
+
