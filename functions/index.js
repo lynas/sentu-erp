@@ -31,7 +31,10 @@ app.get('/', function (request, response) {
                 productList.push(doc.data());
             });
             // return response.json({title: "Stock", productList: productList});
-            return response.render('index', {title: "Stock-Home", productList: productList});
+            return response.render('index', {
+                title: "Stock-Home",
+                productList: productList,
+                today:today()});
         })
         .catch(err => {
             console.log('Error getting documents', err);
@@ -62,7 +65,8 @@ app.get('/stocks/:productId', function (request, response) {
             return response.render('stock-update', {
                 title: "Stock Update",
                 product: snapshot.data(),
-                productId: productId
+                productId: productId,
+                today:today()
             });
         })
         .catch(err => {
@@ -103,7 +107,10 @@ app.get('/sales-order', (request, response) => {
         })
         .catch(err => {
             console.log('Error getting documents', err);
-            return response.render('index', {title: "Stock"});
+            return response.render('index', {
+                title: "Stock",
+                today:today()
+            });
         });
 });
 
@@ -139,7 +146,9 @@ app.get('/sales-order/:day', (request, response) => {
             // return response.json(salesOfDayList);
             return response.render('sales-order-of-a-day', {
                 title: "Sales Order",
-                salesOrderList: salesOfDayList
+                salesOrderList: salesOfDayList,
+                salesOrderDay: day,
+                today:today()
             });
         })
         .catch(err => {
@@ -235,7 +244,7 @@ function today() {
     const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     const year = today.getFullYear();
 
-    today = day + '/' + month + '/' + year;
+    today = day + '-' + month + '-' + year;
     return today
 }
 
