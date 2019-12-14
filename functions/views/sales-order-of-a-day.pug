@@ -14,16 +14,22 @@ block content
                     br
                     br
                     div(style='border: 1px dashed')
-                        table(class="table")
+                        table
                             tr
-                                td="Order Date"
-                                td=salesOrder.date
-                                td="Customer Name"
-                                td=salesOrder.customerName
-                                td="Voucher Number"
-                                td=salesOrder.voucherNumber
-                                td="Total Amount"
-                                td=salesOrder.salesOrderTotal
+                                td(style='border: 1px solid gray')="Order Date"
+                                td(style='border: 1px solid gray')=salesOrder.date
+                            tr
+                                td(style='border: 1px solid gray')="Customer Name"
+                                td(style='border: 1px solid gray')=salesOrder.customerName
+                            tr
+                                td(style='border: 1px solid gray')="Voucher Number"
+                                td(style='border: 1px solid gray')=salesOrder.voucherNumber
+                            tr
+                                td(style='border: 1px solid gray')="Discount"
+                                td(style='border: 1px solid gray')=salesOrder.discount
+                            tr
+                                td(style='border: 1px solid gray')="Total Amount"
+                                td(style='border: 1px solid gray')=salesOrder.salesOrderTotal
                         br
                         br
                         table(class="table")

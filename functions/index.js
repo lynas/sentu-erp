@@ -50,12 +50,13 @@ app.get('/', function (request, response) {
             return response.render('index', {
                 title: "Stock-Home",
                 productList: productList,
-                today: today()
+                today: today(),
+                random: uuid.v1()
             });
         })
         .catch(err => {
             console.log('Error getting documents', err);
-            return response.render('index', {title: "Stock",productList:[],today: today()});
+            return response.render('index', {title: "Stock",productList:[],today: today(), random: uuid.v1()});
         });
 });
 
@@ -63,6 +64,8 @@ app.post('/stocks', function (request, response) {
     isUserLoggedIn(request, response);
     const input = request.body;
     input.id = uuid.v1();
+    console.log("input");
+    console.log(input);
     let setDoc = db.collection('products').doc(input.id).set(input);
     setDoc.then(res => {
         console.log(res);
@@ -156,10 +159,13 @@ app.get('/sales-order/:day', (request, response) => {
                         freeQuantity: so.salesProductList[prop].freeQuantity,
                         itemName: so.salesProductList[prop].itemName
                     });
-                    salesOrderTotal = salesOrderTotal + parseFloat(so.salesProductList[prop].subTotal)
+                    salesOrderTotal = salesOrderTotal + parseFloat(so.salesProductList[prop].subTotal);
                 }
                 so.productArray = productList;
-                so.salesOrderTotal = salesOrderTotal;
+                console.log("salesOrderTotal before discount : " + salesOrderTotal);
+                console.log("discount : " + so.discount);
+                so.salesOrderTotal = parseFloat(""+salesOrderTotal) - parseFloat(""+so.discount) ;
+                console.log("salesOrderTotal after discount : " + so.salesOrderTotal);
             });
 
 
@@ -239,10 +245,11 @@ app.post('/sales-order', (request, response) => {
     console.log(input);
     const salesOrderId = uuid.v1();
     const salesOrderJson = {
-        date: request.body.date,
+        date: input.date,
         customerName: input.customerName,
         voucherNumber: input.voucherNumber,
         salesProductList: input.salesOrderObj,
+        discount: input.discount,
         id: salesOrderId
 
     };
