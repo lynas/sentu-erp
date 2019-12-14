@@ -14,17 +14,18 @@ head
 body
   block content
   script(type="text/javascript" src="app.js")
-  table
-    tr
-      td
-        a(href='/') Home
-    tr
-      td
-        a(href='/sales-order') Create new Sales Order
-    tr
-      td
-        a(href='/sales-order/'+today) Sales Order Of a Day
-        br
-        br
-        br
-        a(href='/logout' style='color:red;') Logout
+  div(style='position: absolute; top: 20px; left: 5px;')
+    table
+      tr
+        td
+          a(href='/') Home
+      tr
+        td
+          a(href='/sales-order') Create new Sales Order
+      tr
+        td
+          a(href='/sales-order/'+today) Sales Order Of a Day
+          br
+          br
+          br
+          a(href='/logout' style='color:red;') Logout

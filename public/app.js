@@ -22,6 +22,10 @@
 
     $('.sales-order-form').submit(function () {
         const date = $('.date').val();
+        if (date.trim() === "") {
+            alert("Date must not be empty");
+            return false;
+        }
         const discount = $('.discount').val();
         const customerName = $('.customerName').val();
         if (customerName.trim() === "") {
