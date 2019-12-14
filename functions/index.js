@@ -34,7 +34,8 @@ app.get('/', function (request, response) {
             return response.render('index', {
                 title: "Stock-Home",
                 productList: productList,
-                today:today()});
+                today: today()
+            });
         })
         .catch(err => {
             console.log('Error getting documents', err);
@@ -66,7 +67,7 @@ app.get('/stocks/:productId', function (request, response) {
                 title: "Stock Update",
                 product: snapshot.data(),
                 productId: productId,
-                today:today()
+                today: today()
             });
         })
         .catch(err => {
@@ -109,7 +110,7 @@ app.get('/sales-order', (request, response) => {
             console.log('Error getting documents', err);
             return response.render('index', {
                 title: "Stock",
-                today:today()
+                today: today()
             });
         });
 });
@@ -131,12 +132,12 @@ app.get('/sales-order/:day', (request, response) => {
                 const productList = [];
                 for (const prop in so.salesProductList) {
                     productList.push({
-                        id:so.salesProductList[prop].id,
-                        quantity:so.salesProductList[prop].quantity,
-                        unitPrice:so.salesProductList[prop].unitPrice,
-                        subTotal:so.salesProductList[prop].subTotal,
-                        freeQuantity:so.salesProductList[prop].freeQuantity,
-                        itemName:so.salesProductList[prop].itemName
+                        id: so.salesProductList[prop].id,
+                        quantity: so.salesProductList[prop].quantity,
+                        unitPrice: so.salesProductList[prop].unitPrice,
+                        subTotal: so.salesProductList[prop].subTotal,
+                        freeQuantity: so.salesProductList[prop].freeQuantity,
+                        itemName: so.salesProductList[prop].itemName
                     })
                 }
                 so.productArray = productList;
@@ -148,11 +149,66 @@ app.get('/sales-order/:day', (request, response) => {
                 title: "Sales Order",
                 salesOrderList: salesOfDayList,
                 salesOrderDay: day,
-                today:today()
+                today: today()
             });
         })
         .catch(err => {
             console.log('Error getting documents', err);
+            return response.json({err: err});
+        });
+});
+
+
+app.get('/sales-order-delete/:salesOrderId', (request, response) => {
+    isUserLoggedIn(request, response);
+    const salesOfDayList = [];
+    const salesOrderId = request.params.salesOrderId;
+    let salesOrder = db.collection('sales-order').doc(salesOrderId);
+    salesOrder.get()
+        .then(snapshot => {
+            salesOfDayList.push(snapshot.data());
+            salesOfDayList.forEach(so => {
+                for (const prop in so.salesProductList) {
+                    const eachProduct = {
+                        id: so.salesProductList[prop].id,
+                        quantity: so.salesProductList[prop].quantity,
+                        unitPrice: so.salesProductList[prop].unitPrice,
+                        subTotal: so.salesProductList[prop].subTotal,
+                        freeQuantity: so.salesProductList[prop].freeQuantity,
+                        itemName: so.salesProductList[prop].itemName
+                    };
+                    console.log("Operate on product");
+                    console.log(eachProduct.id);
+                    console.log("revertAmount");
+                    const revertAmount = parseInt(eachProduct.quantity) + parseInt(eachProduct.freeQuantity);
+                    console.log(revertAmount);
+
+                    db.collection('products')
+                        .doc(eachProduct.id)
+                        .get()
+                        .then(snapshot => {
+                            const product = snapshot.data();
+                            console.log("Product Data Inner");
+                            product.quantity = parseInt(product.quantity) + revertAmount;
+                            db.collection('products')
+                                .doc(product.id)
+                                .set(product)
+                                .then(res => {
+                                    console.log("After Product quantity revert");
+                                    console.log(res);
+                                });
+                        });
+                }
+            });
+            db.collection("sales-order").doc(salesOrderId).delete().then(function () {
+                console.log("Document successfully deleted!" + salesOrderId);
+            }).catch(function (error) {
+                console.error("Error removing document: ", error);
+            });
+            return response.redirect('/');
+        })
+        .catch(err => {
+            console.log('Error processing documents', err);
             return response.json({err: err});
         });
 });
@@ -162,14 +218,16 @@ app.post('/sales-order', (request, response) => {
     const input = request.body;
     console.log("sales-order-input");
     console.log(input);
+    const salesOrderId = uuid.v1();
     const salesOrderJson = {
         date: request.body.date,
         customerName: input.customerName,
         voucherNumber: input.voucherNumber,
         salesProductList: input.salesOrderObj,
+        id: salesOrderId
 
     };
-    let setDoc = db.collection('sales-order').doc(uuid.v1()).set(salesOrderJson);
+    let setDoc = db.collection('sales-order').doc(salesOrderId).set(salesOrderJson);
 
     input.productIdAndSoldQuantity.forEach(productLocal => {
         console.log("productLocal");
