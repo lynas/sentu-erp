@@ -18,6 +18,22 @@ app.use(session({
     secret: 'XASDASDA',
     name: '__session'
 }));
+app.post('/login', (request, response) => {
+    const username = request.body.username;
+    const password = request.body.password;
+    console.log("username");
+    console.log(username);
+    // TODO Change in production
+    if (username === 'sazzad' && password === '1234') {
+        request.session.isLoggedIn = true;
+        return response.redirect('/');
+    } else {
+        return response.render('error', {
+            title: "User Login",
+            message: "Username or password incorrect"
+        });
+    }
+});
 
 
 app.get('/', function (request, response) {
@@ -39,7 +55,7 @@ app.get('/', function (request, response) {
         })
         .catch(err => {
             console.log('Error getting documents', err);
-            return response.render('index', {title: "Stock"});
+            return response.render('index', {title: "Stock",productList:[],today: today()});
         });
 });
 
@@ -129,6 +145,7 @@ app.get('/sales-order/:day', (request, response) => {
             });
 
             salesOfDayList.forEach(so => {
+                let salesOrderTotal = 0.0;
                 const productList = [];
                 for (const prop in so.salesProductList) {
                     productList.push({
@@ -138,9 +155,11 @@ app.get('/sales-order/:day', (request, response) => {
                         subTotal: so.salesProductList[prop].subTotal,
                         freeQuantity: so.salesProductList[prop].freeQuantity,
                         itemName: so.salesProductList[prop].itemName
-                    })
+                    });
+                    salesOrderTotal = salesOrderTotal + parseFloat(so.salesProductList[prop].subTotal)
                 }
                 so.productArray = productList;
+                so.salesOrderTotal = salesOrderTotal;
             });
 
 
@@ -262,22 +281,7 @@ app.get('/login', (request, response) => {
     });
 });
 
-app.post('/login', (request, response) => {
-    const username = request.body.username;
-    const password = request.body.password;
-    console.log("username");
-    console.log(username);
-    // TODO Change in production
-    if (username === 'sazzad' && password === '1234') {
-        request.session.isLoggedIn = true;
-        return response.redirect('/');
-    } else {
-        return response.render('error', {
-            title: "User Login",
-            message: "Username or password incorrect"
-        });
-    }
-});
+
 
 app.get('/logout', (request, response) => {
     request.session.isLoggedIn = false;
